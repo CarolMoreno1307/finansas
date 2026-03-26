@@ -1,0 +1,29 @@
+import sys
+import os
+from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+
+if getattr(sys, "frozen", False):
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.path.dirname(__file__)
+dotenv_path = os.path.join(BASE_DIR, "config", ".env")
+load_dotenv(dotenv_path, override=True)
+user = os.getenv("USER")
+password = os.getenv("PASSWORD")
+
+def desencriptarCreden(usuario_encriptado, contrasena_encriptada):  # Desencriptar las credenciales
+    key = 'joXggQmJfTz3rf7RZf753_zJYe9rA7xCBjBsybXAwPY='.encode('utf-8')  # Llave Fernet válida
+    objeto_cifrado = Fernet(key)
+
+    user_desencriptado = objeto_cifrado.decrypt(usuario_encriptado.encode('utf-8')).decode()  # Desencriptar usuario
+    pass_desencriptado = objeto_cifrado.decrypt(contrasena_encriptada.encode('utf-8')).decode()  # Desencriptar clave
+
+    return user_desencriptado, pass_desencriptado
+
+credenciales = desencriptarCreden(user, password)  # Llamar función para desencriptar credenciales
+usuario = credenciales[0]
+clave = credenciales[1]
+
+print(f"Usuario desencriptado: {usuario}")
+print(f"Contraseña desencriptada: {clave}")
