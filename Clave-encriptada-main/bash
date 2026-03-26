@@ -1,7 +1,0 @@
-python -m venv venv
-source venv\bin\activate
-
-pin install -r requirements.txt
-
-python encriptar_credenciales.py
-
